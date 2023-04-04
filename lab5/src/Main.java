@@ -8,8 +8,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //порождающая матрица
         ArrayList<int[]> GMatrix;
-        //базис. пранировалось либо приводить к этому базису, либо вычислять его с помощью слау...пока не нужен
-        int[] basis = {0, 1, 2};
         //массив кодов. уже прям кодов кодов, т.е. с контрольными битами
         ArrayList<String> codes;
         //переменные всякие, за себя говорящие
@@ -18,12 +16,14 @@ public class Main {
         String path = "D:\\Study\\4Rehc\\TI\\lab5\\TI_Last\\lab5\\code.txt";
         //считываем матрикс в матрикс
         GMatrix = fileReader(path);
-        //тут она должна была преобразовываться
-        //matrixRevork(GMatrix, basis);
         //размерность кода
         n = GMatrix.size();
         //максимум кол-во слов для кодирования
         wordsNum = (int)Math.pow(2, n);
+
+        //полином для вычисления разрешенных комбинаций
+        int permitted = 2*n;
+        System.out.println("Number of permitted combinations: " + permitted);
 
         System.out.println("Code dimension: " + n);
         System.out.println("Maximal possible code words: " + wordsNum);
@@ -38,7 +38,7 @@ public class Main {
 
     public static int minimalDistance(ArrayList<String> codes){
         int toReturn = Integer.MAX_VALUE, dist;
-        for(int i = 0; i < codes.size()-1; i++)
+        for(int i = 1; i < codes.size()-1; i++)
             for(int j = i+1; j < codes.size(); j++){
                 //функция сравнения двух кодов
                 dist = distance(codes.get(i), codes.get(j));
@@ -61,6 +61,8 @@ public class Main {
     public static ArrayList<String> codeWordGenerator(ArrayList<int[]>matrix, int n){
         //первый - для кодов с контрольными битами, второй - для обычных
         ArrayList<String> codeWords = new ArrayList<>(), codes;
+        //список разрешенных комбинаций
+        ArrayList<String> permittedCodeWords = new ArrayList<>();
         //тут сами коды, ну т.е. 000 001 и т.д. к примеру, если n = 3
         codes = codeGenerator(n);
         int wordNum = (int)Math.pow(2, n);
